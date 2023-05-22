@@ -1,9 +1,9 @@
 import { ThreeDots } from 'react-loader-spinner';
-import * as Styled from 'styled';
+import { LoaderWrapper } from 'styled';
 
 export const Loader = () => {
   return (
-    <Styled.LoaderWrapper>
+    <LoaderWrapper>
       <ThreeDots
         height="40"
         width="80"
@@ -14,6 +14,6 @@ export const Loader = () => {
         wrapperClassName=""
         visible={true}
       />
-    </Styled.LoaderWrapper>
+    </LoaderWrapper>
   );
 };

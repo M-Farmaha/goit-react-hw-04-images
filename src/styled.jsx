@@ -1,14 +1,14 @@
 import styled from 'styled-components';
 import { FiSearch } from 'react-icons/fi';
 
-export const App = styled.div`
+export const AppWrap = styled.div`
   display: grid;
   grid-template-columns: 1fr;
   grid-gap: 16px;
   padding-bottom: 24px;
 `;
 
-export const Searchbar = styled.header`
+export const SearchbarWrap = styled.header`
   top: 0;
   left: 0;
   position: sticky;
@@ -45,7 +45,7 @@ export const SearchFormButton = styled.button`
   height: 48px;
   border: none;
   color: #b6b6b6;
-  transition: opacity 250ms cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   outline: none;
 
@@ -75,7 +75,7 @@ export const SearchFormInput = styled.input`
   }
 `;
 
-export const ImageGallery = styled.ul`
+export const ImageGalleryWrap = styled.ul`
   display: grid;
   max-width: calc(100vw - 48px);
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -88,7 +88,7 @@ export const ImageGallery = styled.ul`
   margin-right: auto;
 `;
 
-export const ImageGalleryItem = styled.li`
+export const ImageGalleryItemWrap = styled.li`
   border-radius: 10px;
   overflow: hidden;
   box-shadow: rgba(0, 0, 0, 0.15) 0px 5px 15px 0px;
@@ -106,15 +106,14 @@ export const ImageGalleryImg = styled.img`
   }
 `;
 
-export const LoadMoreBtn = styled.button`
+export const LoadMoreButton = styled.button`
   margin-left: auto;
   margin-right: auto;
   padding: 8px 16px;
-  border-radius: 2px;
-  background-color: #3f51b5;
-
-  color: #fff;
   border: 0;
+  border-radius: 5px;
+  background-color: #8389aa;
+  color: #ffffff;
   cursor: pointer;
 
   font-family: inherit;
@@ -123,14 +122,13 @@ export const LoadMoreBtn = styled.button`
   font-style: normal;
   font-weight: 500;
 
-  box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2),
-    0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
-
   transition: all 250ms cubic-bezier(0.4, 0, 0.2, 1);
 
-  &:hover,
-  &:focus {
-    background-color: #303f9f;
+  &:hover {
+    background-color: #0080ff;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 54px 55px,
+      rgba(0, 0, 0, 0.1) 0px -12px 30px, rgba(0, 0, 0, 0.1) 0px 4px 6px,
+      rgba(0, 0, 0, 0.1) 0px 12px 13px, rgba(0, 0, 0, 0.1) 0px -3px 5px;
   }
 `;
 
@@ -161,7 +159,7 @@ export const ModalOverlay = styled.div`
   z-index: 999;
 `;
 
-export const Modal = styled.div`
+export const ModalWrap = styled.div`
   border-radius: 10px;
   background-color: rgba(255, 255, 255, 0.6);
   overflow: hidden;

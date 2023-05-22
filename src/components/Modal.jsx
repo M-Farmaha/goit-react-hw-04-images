@@ -1,64 +1,54 @@
-import React, { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { Loader } from './Loader';
-import * as Styled from '../styled';
+import {
+  ModalOverlay,
+  LoaderWrapperModal,
+  ModalWrap,
+  ModalImage,
+} from '../styled';
 import PropTypes from 'prop-types';
 
-export class Modal extends Component {
-  state = {
-    isLoading: false,
-  };
+export const Modal = ({ image, alt, toggleModal }) => {
+  const [isLoading, setIsLoading] = useState(false);
 
-  componentDidMount() {
-    window.addEventListener('keydown', this.handlePressESC);
+  useEffect(() => {
+    const handlePressESC = e => {
+      if (e.code === 'Escape') toggleModal();
+    };
+
+    setIsLoading(true);
+    window.addEventListener('keydown', handlePressESC);
     document.body.classList.add('modal-open');
-    this.setState({ isLoading: true });
-  }
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handlePressESC);
-    document.body.classList.remove('modal-open');
-  }
+    return () => {
+      window.removeEventListener('keydown', handlePressESC);
+      document.body.classList.remove('modal-open');
+    };
+  }, [toggleModal]);
 
-  handlePressESC = e => {
-    if (e.code === 'Escape') {
-      this.props.toggleModal();
-    }
+  const handleOverlayClick = e => {
+    if (e.target === e.currentTarget) toggleModal();
   };
 
-  handleOverlayClick = e => {
-    if (e.target === e.currentTarget) {
-      this.props.toggleModal();
-    }
-  };
-
-  handleImageLoad = () => {
-    this.setState({ isLoading: false });
-  };
-
-  render() {
-    const { image, alt } = this.props;
-    const { isLoading } = this.state;
-
-    return (
-      <>
-        <Styled.ModalOverlay onClick={this.handleOverlayClick}>
-          {isLoading && (
-            <Styled.LoaderWrapperModal>
-              <Loader />
-            </Styled.LoaderWrapperModal>
-          )}
-          <Styled.Modal>
-            <Styled.ModalImage
-              src={image}
-              alt={alt}
-              onLoad={this.handleImageLoad}
-            />
-          </Styled.Modal>
-        </Styled.ModalOverlay>
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <ModalOverlay onClick={handleOverlayClick}>
+        {isLoading && (
+          <LoaderWrapperModal>
+            <Loader />
+          </LoaderWrapperModal>
+        )}
+        <ModalWrap>
+          <ModalImage
+            src={image}
+            alt={alt}
+            onLoad={() => setIsLoading(false)}
+          />
+        </ModalWrap>
+      </ModalOverlay>
+    </>
+  );
+};
 
 Modal.propTypes = {
   image: PropTypes.string.isRequired,

@@ -1,63 +1,61 @@
-import { Component } from 'react';
+import { useState, useEffect } from 'react';
 import { Loader } from './Loader';
 import { Searchbar } from './Searchbar';
 import { ImageGallery } from './ImageGallery';
 import { fetchRequest } from '../fetchRequest';
-import { loadMoreFetchRequest } from '../fetchRequest';
 import { LoadMoreBtn } from './Button';
-import * as Styled from '../styled';
+import { AppWrap } from '../styled';
 
-export class App extends Component {
-  state = {
-    galleryArray: [],
-    total: null,
-    error: null,
-    isLoading: false,
-  };
+export const App = () => {
+  const [galleryArray, setGalleryArray] = useState([]);
+  const [search, setSearch] = useState('');
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  handleFirstRequest = query => {
-    this.setState({ isLoading: true, galleryArray: [] });
-    fetchRequest(query)
+  useEffect(() => {
+    if (search === '') {
+      return;
+    }
+    setIsLoading(true);
+    fetchRequest(search, page)
       .then(response => {
-        this.setState({
-          galleryArray: response.hits,
-          total: response.totalHits,
-          isLoading: true,
-        });
+        setGalleryArray(prev => [...prev, ...response.hits]);
+        setTotal(response.totalHits);
       })
-      .catch(error => this.setState({ error }))
-      .finally(() => {
-        this.setState({ isLoading: false });
-      });
+      .catch(err => alert(err))
+      .finally(() => setIsLoading(false));
+  }, [page, search]);
+
+  useEffect(() => {
+    if (galleryArray.length <= 12) return;
+    window.scrollBy({
+      top: 520,
+      behavior: 'smooth',
+    });
+  }, [galleryArray]);
+
+  const handleSearchRequest = query => {
+    if (query === search || query === '') {
+      return;
+    }
+    setSearch(query);
+    setGalleryArray([]);
+    setPage(1);
   };
 
-  handleNextRequest = () => {
-    this.setState({ isLoading: true });
-    loadMoreFetchRequest()
-      .then(response => {
-        this.setState(prevState => ({
-          galleryArray: [...prevState.galleryArray, ...response.hits],
-        }));
-      })
-      .catch(error => this.setState({ error }))
-      .finally(() => {
-        this.setState({ isLoading: false });
-      });
+  const handleLoadMoreClick = () => {
+    setPage(prev => prev + 1);
   };
 
-  render() {
-    const { handleFirstRequest, handleNextRequest, state } = this;
-
-    return (
-      <Styled.App>
-        <Searchbar onSubmit={handleFirstRequest} />
-        <ImageGallery galleryArray={state.galleryArray} />
-        {state.isLoading && <Loader />}
-        {state.galleryArray.length !== 0 &&
-          state.galleryArray.length < state.total && (
-            <LoadMoreBtn loadMore={handleNextRequest} />
-          )}
-      </Styled.App>
-    );
-  }
-}
+  return (
+    <AppWrap>
+      <Searchbar onSubmit={handleSearchRequest} />
+      <ImageGallery galleryArray={galleryArray} />
+      {isLoading && <Loader />}
+      {galleryArray.length !== 0 &&
+        galleryArray.length < total &&
+        !isLoading && <LoadMoreBtn handleLoadMoreClick={handleLoadMoreClick} />}
+    </AppWrap>
+  );
+};

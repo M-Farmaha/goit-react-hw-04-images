@@ -1,45 +1,41 @@
-import { Component } from 'react';
-import * as Styled from '../styled';
+import { useState } from 'react';
+import PropTypes from 'prop-types';
+import {
+  SearchbarWrap,
+  SearchForm,
+  SearchFormButton,
+  SearchIcon,
+  SearchFormInput,
+} from '../styled';
 
-export class Searchbar extends Component {
-  state = {
-    searchQuery: '',
-  };
+export const Searchbar = ({ onSubmit }) => {
+  const [searchQuery, setSearchQuery] = useState('');
 
-  //   componentDidUpdate(prevProps, prevState) {
-  //     if (prevState.searchQuery !== this.state.searchQuery) {
-  //     }
-  //   }
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    this.props.onSubmit(this.state.searchQuery);
+    onSubmit(searchQuery);
   };
 
-  handleInputChange = e => {
-    this.setState({ searchQuery: e.target.value });
-  };
+  return (
+    <SearchbarWrap>
+      <SearchForm onSubmit={handleSubmit}>
+        <SearchFormButton type="submit">
+          <SearchIcon />
+        </SearchFormButton>
 
-  render() {
-    const { handleSubmit, handleInputChange, state } = this;
+        <SearchFormInput
+          onChange={e => setSearchQuery(e.target.value)}
+          value={searchQuery}
+          type="text"
+          autoComplete="off"
+          autoFocus
+          placeholder="Search images and photos"
+        />
+      </SearchForm>
+    </SearchbarWrap>
+  );
+};
 
-    return (
-      <Styled.Searchbar>
-        <Styled.SearchForm onSubmit={handleSubmit}>
-          <Styled.SearchFormButton type="submit">
-            <Styled.SearchIcon />
-          </Styled.SearchFormButton>
-
-          <Styled.SearchFormInput
-            onChange={handleInputChange}
-            value={state.searchQuery}
-            type="text"
-            autoComplete="off"
-            autoFocus
-            placeholder="Search images and photos"
-          />
-        </Styled.SearchForm>
-      </Styled.Searchbar>
-    );
-  }
-}
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
