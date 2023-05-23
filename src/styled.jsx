@@ -175,8 +175,8 @@ export const ModalImage = styled.img`
 `;
 
 export const NoImagesText = styled.p`
-  font-size: 20px;
-  margin: 20px auto;
+  font-size: 18px;
+  margin: 0px auto;
   color: #2a77c3;
 `;
 
