@@ -4,7 +4,9 @@ import { Searchbar } from './Searchbar';
 import { ImageGallery } from './ImageGallery';
 import { fetchRequest } from '../fetchRequest';
 import { LoadMoreBtn } from './Button';
-import { AppWrap } from '../styled';
+import { AppWrap, NoImagesText, NoImagesPicture, Starter } from '../styled';
+import StarterPicture from '../images/starter.svg';
+import NoImages from '../images/no-images.svg';
 
 export const App = () => {
   const [galleryArray, setGalleryArray] = useState([]);
@@ -12,16 +14,22 @@ export const App = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isShowEmpty, setIsShowEmpty] = useState(false);
+  const [isShowStarter, setIsShowStarter] = useState(true);
 
   useEffect(() => {
     if (search === '') {
       return;
     }
+    setIsShowStarter(false);
+    setIsShowEmpty(false);
     setIsLoading(true);
     fetchRequest(search, page)
       .then(response => {
         setGalleryArray(prev => [...prev, ...response.hits]);
         setTotal(response.totalHits);
+
+        if (!response.totalHits) setIsShowEmpty(true);
       })
       .catch(err => alert(err))
       .finally(() => setIsLoading(false));
@@ -51,6 +59,13 @@ export const App = () => {
   return (
     <AppWrap>
       <Searchbar onSubmit={handleSearchRequest} />
+      {isShowStarter && <Starter src={StarterPicture} alt="starter picture" />}
+      {isShowEmpty && (
+        <>
+          <NoImagesPicture src={NoImages} alt="no images" />
+          <NoImagesText>No images were found for your request</NoImagesText>
+        </>
+      )}
       <ImageGallery galleryArray={galleryArray} />
       {isLoading && <Loader />}
       {galleryArray.length !== 0 &&

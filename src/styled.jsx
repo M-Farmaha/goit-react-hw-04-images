@@ -173,3 +173,21 @@ export const ModalImage = styled.img`
   max-height: calc(100vh - 50px);
   object-fit: scale-down;
 `;
+
+export const NoImagesText = styled.p`
+  font-size: 20px;
+  margin: 20px auto;
+  color: #2a77c3;
+`;
+
+export const NoImagesPicture = styled.img`
+  width: 500px;
+  margin: 0px auto;
+  margin-top: 20px;
+`;
+
+export const Starter = styled.img`
+  width: 500px;
+  margin: 0px auto;
+  margin-top: 20px;
+`;
