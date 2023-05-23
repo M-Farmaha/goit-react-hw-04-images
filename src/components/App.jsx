@@ -4,9 +4,9 @@ import { Searchbar } from './Searchbar';
 import { ImageGallery } from './ImageGallery';
 import { fetchRequest } from '../fetchRequest';
 import { LoadMoreBtn } from './Button';
-import { AppWrap, NoImagesText, NoImagesPicture, Starter } from '../styled';
+import { EmptyRequest } from './EmptyRequest';
+import { AppWrap, Starter } from '../styled';
 import StarterPicture from '../images/starter.svg';
-import NoImages from '../images/no-images.svg';
 
 export const App = () => {
   const [galleryArray, setGalleryArray] = useState([]);
@@ -60,12 +60,7 @@ export const App = () => {
     <AppWrap>
       <Searchbar onSubmit={handleSearchRequest} />
       {isShowStarter && <Starter src={StarterPicture} alt="starter picture" />}
-      {isShowEmpty && (
-        <>
-          <NoImagesPicture src={NoImages} alt="no images" />
-          <NoImagesText>No images were found for your request</NoImagesText>
-        </>
-      )}
+      {isShowEmpty && <EmptyRequest />}
       <ImageGallery galleryArray={galleryArray} />
       {isLoading && <Loader />}
       {galleryArray.length !== 0 &&
